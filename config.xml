@@ -1,0 +1,11 @@
+    <widget id="es.uji.ecervera.tic-tac-toe" version="0.0.1">
+        <name>Tic-tac-toe</name>
+        <description>
+            A sample app
+        </description>
+        <author email="ecervera@uji.es" href="http://robinlab.uji.es">
+            Enric Cervera
+        </author>
+        <content src="index.html" />
+        <access origin="*" />
+    </widget>
