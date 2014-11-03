@@ -1,0 +1,132 @@
+
+<canvas height="600" width="600">
+</canvas>
+
+<script>
+
+var canvas = document.querySelector('canvas');
+var ctx = canvas.getContext('2d');
+ctx.fillStyle='whiteSmoke';
+ctx.fillRect(0,0,600,600);
+ctx.translate(300,300);
+
+var sc = 200;
+
+// draw board
+plot([-0.5,-0.5],[-1.5, 1.5],'black');
+plot([ 0.5, 0.5],[-1.5, 1.5],'black');
+plot([-1.5, 1.5],[-0.5,-0.5],'black');
+plot([-1.5, 1.5],[ 0.5, 0.5],'black');
+
+canvas.addEventListener('click',play);
+
+var player = 1;
+var board = [[0,0,0],[0,0,0],[0,0,0]];
+var end = false;
+
+function play(event) {
+	if (!end) {
+		var x = event.pageX - canvas.offsetLeft;
+		var y = event.pageY - canvas.offsetTop;
+		x =  (x-300) / sc;
+		y = -(y-300) / sc;
+		x = Math.round(x);
+		y = Math.round(y);
+		var r = 0.4;
+		if (board[x+1][y+1]==0) {
+			board[x+1][y+1] = player;
+			if (player==1) {
+				circle(x,y,r,'black');
+				detect3();
+				player = 2;
+			} else {
+				cross(x,y,r,'black');
+				detect3();
+				player = 1;
+			}
+		}
+	}
+}
+
+function detect3() {
+	  if (board[0][0]==player && board[0][1]==player && board[0][2]==player) {
+	    square(-1,-1,0.45);
+	    square(-1, 0,0.45);
+	    square(-1, 1,0.45);
+			end = true;
+	  }
+	  if (board[1][0]==player && board[1][1]==player && board[1][2]==player) {
+	    square(0,-1,0.45);
+	    square(0, 0,0.45);
+	    square(0, 1,0.45);
+			end = true;
+	  }
+	  if (board[2][0]==player && board[2][1]==player && board[2][2]==player) {
+	    square(1,-1,0.45);
+	    square(1, 0,0.45);
+	    square(1, 1,0.45);
+			end = true;
+	  }
+	  if (board[0][0]==player && board[1][0]==player && board[2][0]==player) {
+	    square(-1,-1,0.45);
+	    square( 0,-1,0.45);
+	    square( 1,-1,0.45);
+			end = true;
+	  }
+	  if (board[0][1]==player && board[1][1]==player && board[2][1]==player) {
+	    square(-1, 0,0.45);
+	    square( 0, 0,0.45);
+	    square( 1, 0,0.45);
+			end = true;
+	  }
+	  if (board[0][2]==player && board[1][2]==player && board[2][2]==player) {
+	    square(-1, 1,0.45);
+	    square( 0, 1,0.45);
+	    square( 1, 1,0.45);
+			end = true;
+	  }
+	  if (board[0][0]==player && board[1][1]==player && board[2][2]==player) {
+	    square(-1,-1,0.45);
+	    square( 0, 0,0.45);
+	    square( 1, 1,0.45);
+			end = true;
+	  }
+	  if (board[0][2]==player && board[1][1]==player && board[2][0]==player) {
+	    square(-1, 1,0.45);
+	    square( 0, 0,0.45);
+	    square( 1,-1,0.45);
+			end = true;
+	  }
+}
+
+function square(x,y,r) {
+  x =  (x-r)*sc;
+  y = (-y-r)*sc;
+	var len = 2*r*sc;
+  ctx.fillStyle = 'rgba(255,255,0,0.25)';
+  ctx.fillRect(x,y,len,len);
+}
+
+function cross(x,y,r,c) {
+	plot([x-r,x+r],[y-r,y+r],c);
+	plot([x-r,x+r],[y+r,y-r],c);
+}
+
+function circle(x,y,r,c){
+  ctx.beginPath();
+  ctx.arc(x*sc,-y*sc,r*sc,0,2*Math.PI);
+  ctx.strokeStyle = c;
+  ctx.stroke();	
+}
+
+function plot(x,y,c) { 
+	ctx.beginPath();
+	ctx.moveTo(x[0]*sc, -y[0]*sc);
+	for (var i=1; i<x.length; i++) {
+		ctx.lineTo(x[i]*sc, -y[i]*sc);
+	}
+	ctx.strokeStyle = c;
+	ctx.stroke();
+}
+
+</script>
